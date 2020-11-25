@@ -4,7 +4,7 @@ info:
   title: "iMarts Customer Side API"
   contact:
     email: "babula@imarts.co"
-host: "9qeiq3kag7.execute-api.ap-northeast-1.amazonaws.com"
+host: "r0vz5tq1m0.execute-api.ap-northeast-1.amazonaws.com"                                                               "
 tags:
 - name: "Authroization"
   description: "APIs used for registering and logging in user"
