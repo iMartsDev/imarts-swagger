@@ -4,7 +4,7 @@ info:
   title: "iMarts Customer Side API"
   contact:
     email: "babula@imarts.co"
-host: "r0vz5tq1m0.execute-api.ap-northeast-1.amazonaws.com/"
+host: "r0vz5tq1m0.execute-api.ap-northeast-1.amazonaws.com"
 tags:
 - name: "Authroization"
   description: "APIs used for registering and logging in user"
@@ -34,6 +34,10 @@ paths:
       responses:
         "406":
           description: "Account does not exist. Please use google register API to create the account."
+        "401":
+          description: "invalid token"
+        "400":
+          description: "Required parameters is not included in request body"
         "200":
           description: "Successfully log in with Google credentials."
 
@@ -56,10 +60,12 @@ paths:
         schema:
           $ref: "#/definitions/RegisterWithOAuth"
       responses:
-        "400":
-          description: "Required parameters is not included in request body"
         "409":
           description: "Customer account with spcified Google ID already exists"
+        "401":
+          description: "invalid token"
+        "400":
+          description: "Required parameters is not included in request body"
         "200":
           description: "Account is created Successfully"
   
@@ -133,6 +139,10 @@ paths:
       responses:
         "406":
           description: "Account does not exist."
+        "401":
+          description: "wrong credential"
+        "400":
+          description: "Required parameters is not included in request body"
         "200":
           description: "Successfully log in with email."
 
@@ -155,41 +165,52 @@ paths:
         schema:
           $ref: "#/definitions/RegisterWithEmail"
       responses:
+        "406":
+          description: "Account does not exist."
+        "401":
+          description: "Unmatched PIN"
         "400":
           description: "Required parameters is not included in request body"
-        "409":
-          description: "Customer account with spcified email already exists"
         "200":
           description: "Account is created Successfully"
 
-  /api/verify/request:
-    get:
-      tags:
-      - "Authroization"
-      operationId: 'verificationRequest'
-      responses:
-        "200":
-          description: "Verification code is sent via email"
-  
-  /api/verify/submission:
+  /api/pin/request:
     post:
       tags:
       - "Authroization"
-      operationId: "verificationResult"
+      operationId: 'requestPIN'
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/EmailVerification"
+          $ref: "#/definitions/PINRequest"
       responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "PIN is sent via email"
+  
+  /api/pin/verify:
+    post:
+      tags:
+      - "Authroization"
+      operationId: "verifyPIN"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PINVerify"
+      responses:
+        "406":
+          description: "account not found"
+        "401":
+          description: "Unmatched PIN"
+        "400":
+          description: "Required parameters is not included in request body"
         "200":
           description: "Email account is verified"
-          schema:
-            type: "object"
-            properties:
-              match:
-                type: "boolean"
  
 
 definitions:
@@ -220,8 +241,8 @@ definitions:
   RegisterWithOAuth:
     type: "object"
     required:
-      - email
-      - id
+      - agent
+      - token
       - username
     properties:
       agent:
@@ -248,7 +269,7 @@ definitions:
       - email
       - username
       - password
-      - code
+      - pin
     properties:
       email:
         type: "string"
@@ -256,9 +277,9 @@ definitions:
         type: "string"
       password:
         type: "string"
-      code:
+      pin:
         type: "string"
-        description: "Verification code."
+        description: "Verification PIN"
       birthday:
         type: "string"
         description: "YYYY/MM/DD"
@@ -266,16 +287,31 @@ definitions:
         type: "string"
       phone:
         type: "string"
-  EmailVerification:
+  PINVerify:
     type: "object"
     required:
       - email
-      - code
+      - pin
     properties:
       email:
         type: "string"
-      code:
+      pin:
         type: "string"
+  PINRequest:
+    type: "object"
+    required:
+      - email
+    properties:
+      email:
+        type: "string"
+      lang:
+        type: "string"
+        enum:
+        - zh-tw
+        - en
+        - jp
+        - ko
+
         
 externalDocs:
   description: "Find out more about Swagger"
