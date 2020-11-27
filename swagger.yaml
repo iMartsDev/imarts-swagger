@@ -119,13 +119,13 @@ paths:
         "200":
           description: "Account is created Successfully"
 
-  /api/login/email:
+  /api/login/mail:
     post:
       tags:
       - "Authroization"
       summary: "Log in with email"
       description: "Customers can log in iMarts APP with email."
-      operationId: "emailLogin"
+      operationId: "mailLogin"
       consumes:
       - "application/json"
       produces:
@@ -135,7 +135,7 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/LoginWithEmail"
+          $ref: "#/definitions/LoginWithMail"
       responses:
         "406":
           description: "Account does not exist."
@@ -146,13 +146,13 @@ paths:
         "200":
           description: "Successfully log in with email."
 
-  /api/register/email:
+  /api/register/mail:
     post:
       tags:
       - "Authroization"
       summary: "Register a new account with email"
       description: "Customers can register a new account with email."
-      operationId: "emailRegister"
+      operationId: "mailRegister"
       consumes:
       - "application/json"
       produces:
@@ -163,7 +163,7 @@ paths:
         description: "Customer info for creating a new account."
         required: true
         schema:
-          $ref: "#/definitions/RegisterWithEmail"
+          $ref: "#/definitions/RegisterWithMail"
       responses:
         "406":
           description: "Account does not exist."
@@ -228,7 +228,7 @@ definitions:
         - web
       token:
         type: "string"
-  LoginWithEmail:
+  LoginWithMail:
     type: "object"
     required:
       - email
@@ -263,7 +263,7 @@ definitions:
         type: "string"
       phone:
         type: "string"
-  RegisterWithEmail:
+  RegisterWithMail:
     type: "object"
     required:
       - email
