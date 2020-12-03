@@ -4,10 +4,12 @@ info:
   title: "iMarts Customer Side API"
   contact:
     email: "babula@imarts.co"
-host: "r0vz5tq1m0.execute-api.ap-northeast-1.amazonaws.com"
+host: "804vp22bk4.execute-api.ap-northeast-1.amazonaws.com"
 tags:
 - name: "Authroization"
   description: "APIs used for registering and logging in user"
+- name: "Coming Soon"
+  description: "There API is not implemented yet. Please come back later"
 
 schemes:
 - "https"
@@ -72,7 +74,7 @@ paths:
   /api/login/facebook:
     post:
       tags:
-      - "Authroization"
+      - "Coming Soon"
       summary: "Log in with Facebook credentials"
       description: "Customers can log in iMarts APP with Facebook credentials."
       operationId: "facebookLogin"
@@ -96,7 +98,7 @@ paths:
   /api/register/facebook:
     post:
       tags:
-      - "Authroization"
+      - "Coming Soon"
       summary: "Register a new account with Facebook credentials"
       description: "Customers can register a new account with Facebook credentials."
       operationId: "facebookRegister"
@@ -211,7 +213,84 @@ paths:
           description: "Required parameters is not included in request body"
         "200":
           description: "Email account is verified"
+
+
+  /api/hashtag/hot:
+    get:
+      tags:
+      - "Hashtag"
+      summary: "Get popular hashtags"
+      operationId: "hotHashtags"
+      parameters:
+      - name: "lang"
+        in: "path"
+        required: true
+        type: string
+        enum:
+          - en
+          - zh-tw
+          - jp
+          - ko
+      - name: "latitude"
+        in: "path"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "path"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      - name: "type"
+        in: "path"
+        required: true
+        type: "string"
+        enum:
+          - recommend
+          - marketing
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
  
+  /api/hashtag/tagged:
+    get:
+      tags:
+      - "Hashtag"
+      summary: "Get items by hashtag"
+      operationId: "hashtaggedItems"
+      parameters:
+      - name: "lang"
+        in: "path"
+        required: true
+        type: string
+        enum:
+          - en
+          - zh-tw
+          - jp
+          - ko
+      - name: "latitude"
+        in: "path"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "path"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      - name: "hashtag"
+        in: "path"
+        required: true
+        type: "string"
+        description: 'Example: cd14a90a-3451-11eb-8aee-002b673caf83'
+ 
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
 
 definitions:
   LoginWithOAuth:
