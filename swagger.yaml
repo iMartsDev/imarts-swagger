@@ -214,6 +214,69 @@ paths:
         "200":
           description: "Email account is verified"
 
+  /api/region/dial-code:
+    get:
+      tags:
+      - "Authroization"
+      summary: "Get country dial code list"
+      operationId: "dialCode"
+      parameters:
+      - name: "lang"
+        in: "query"
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - jp
+          - ko
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/region/subregions:
+    get:
+      tags:
+      - "Authroization"
+      summary: "Get subregion list of the specified region"
+      operationId: "subregions"
+      parameters:
+      - name: "lang"
+        in: "query"
+        type: string
+        required: true
+        enum:
+          - en-us
+          - zh-tw
+          - jp
+          - ko
+      - name: "level"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - country
+          - level1
+          - level2
+      - name: "key"
+        in: "query"
+        required: true
+        type: string
+        description: "Key of the region. For country, use country code such as JPN, USA. For region of other levels, use id returned by backend."
+          
+
+      - name: "longitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
 
   /api/hashtag/hot:
     get:
@@ -223,26 +286,26 @@ paths:
       operationId: "hotHashtags"
       parameters:
       - name: "lang"
-        in: "path"
+        in: "query"
         required: true
         type: string
         enum:
-          - en
+          - en-us
           - zh-tw
           - jp
           - ko
       - name: "latitude"
-        in: "path"
+        in: "query"
         required: true
         type: "number"
         description: 'Example: 23.98'
       - name: "longitude"
-        in: "path"
+        in: "query"
         required: true
         type: "number"
         description: 'Example: 121.6'
       - name: "type"
-        in: "path"
+        in: "query"
         required: true
         type: "string"
         enum:
@@ -262,35 +325,35 @@ paths:
       operationId: "hashtaggedItems"
       parameters:
       - name: "lang"
-        in: "path"
+        in: "query"
         required: true
         type: string
         enum:
-          - en
+          - en-us
           - zh-tw
           - jp
           - ko
       - name: "latitude"
-        in: "path"
+        in: "query"
         required: true
         type: "number"
         description: 'Example: 23.98'
       - name: "longitude"
-        in: "path"
+        in: "query"
         required: true
         type: "number"
         description: 'Example: 121.6'
       - name: "hashtag"
-        in: "path"
+        in: "query"
         required: true
         type: "string"
         description: 'Example: cd14a90a-3451-11eb-8aee-002b673caf83'
- 
       responses:
         "400":
           description: "Required parameters is not included in request body"
         "200":
           description: "ok"
+
 
 definitions:
   LoginWithOAuth:
@@ -338,8 +401,17 @@ definitions:
       birthday:
         type: "string"
         description: "YYYY/MM/DD"
+      country:
+        type: "string"
+        description: 'Country code. Example: TWN'
+      region:
+        type: "number"
+        description: 'Region ID responsed from backend'
       address:
         type: "string"
+      dial-code:
+        type: "string"
+        description: 'Country dial code. Example: 886'
       phone:
         type: "string"
   RegisterWithMail:
@@ -362,8 +434,17 @@ definitions:
       birthday:
         type: "string"
         description: "YYYY/MM/DD"
+      country:
+        type: "string"
+        description: 'Country code. Example: TWN'
+      region:
+        type: "number"
+        description: 'Region ID responsed from backend'
       address:
         type: "string"
+      dial_code:
+        type: "string"
+        description: 'Country dial code. Example: 886'
       phone:
         type: "string"
   PINVerify:
@@ -387,7 +468,7 @@ definitions:
         type: "string"
         enum:
         - zh-tw
-        - en
+        - en-us
         - jp
         - ko
 
