@@ -347,13 +347,49 @@ paths:
         "200":
           description: "ok"
 
-
   /api/store/info:
     get:
       tags:
       - "Store"
-      summary: "Get store info by id"
+      summary: "Get all store info by id"
       operationId: "storeInfo"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "latitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/basic:
+    get:
+      tags:
+      - "Store"
+      summary: "Get store basic info by id"
+      operationId: "storeBasic"
       parameters:
       - name: "lang"
         in: "query"
