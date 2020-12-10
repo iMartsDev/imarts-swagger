@@ -227,7 +227,7 @@ paths:
         enum:
           - en-us
           - zh-tw
-          - jp
+          - ja
           - ko
       responses:
         "400":
@@ -249,7 +249,7 @@ paths:
         enum:
           - en-us
           - zh-tw
-          - jp
+          - ja
           - ko
       - name: "level"
         in: "query"
@@ -264,13 +264,6 @@ paths:
         required: true
         type: string
         description: "Key of the region. For country, use country code such as JPN, USA. For region of other levels, use id returned by backend."
-          
-
-      - name: "longitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 121.6'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -292,7 +285,7 @@ paths:
         enum:
           - en-us
           - zh-tw
-          - jp
+          - ja
           - ko
       - name: "latitude"
         in: "query"
@@ -331,7 +324,7 @@ paths:
         enum:
           - en-us
           - zh-tw
-          - jp
+          - ja
           - ko
       - name: "latitude"
         in: "query"
@@ -354,6 +347,124 @@ paths:
         "200":
           description: "ok"
 
+
+  /api/store/info:
+    get:
+      tags:
+      - "Store"
+      summary: "Get store info by id"
+      operationId: "storeInfo"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "latitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/category:
+    get:
+      tags:
+      - "Store"
+      summary: "Get store category by id"
+      operationId: "storeCategory"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/open-hour:
+    get:
+      tags:
+      - "Store"
+      summary: "Get store open hour by id"
+      operationId: "storeOpenHour"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/price:
+    get:
+      tags:
+      - "Store"
+      summary: "Get store price level by id"
+      operationId: "storePrice"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/payment:
+    get:
+      tags:
+      - "Store"
+      summary: "Get supported payment method by store id"
+      operationId: "storePayment"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 00145046-346a-11eb-88de-002b673caf83'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
 
 definitions:
   LoginWithOAuth:
@@ -469,7 +580,7 @@ definitions:
         enum:
         - zh-tw
         - en-us
-        - jp
+        - ja
         - ko
 
         
