@@ -502,6 +502,61 @@ paths:
         "200":
           description: "ok"
 
+  /api/store/score:
+    get:
+      tags:
+      - "Store"
+      summary: "Get score summary by store id"
+      operationId: "storeScore"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: df903286-f179-11ea-9410-58961d'
+      - name: "source"
+        in: "query"
+        required: true
+        type: "string"
+        enum:
+          - google
+          - imarts
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/comment:
+    get:
+      tags:
+      - "Store"
+      summary: "Get comments by store id"
+      operationId: "storeComment"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: df903286-f179-11ea-9410-58961d'
+      - name: "source"
+        in: "query"
+        required: true
+        type: "string"
+        enum:
+          - google
+          - imarts
+      - name: "offset"
+        in: "query"
+        required: true
+        type: number
+        description: 'Used for fetching more comments'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
 definitions:
   LoginWithOAuth:
     type: "object"
