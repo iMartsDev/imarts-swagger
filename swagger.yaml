@@ -514,13 +514,6 @@ paths:
         required: true
         type: "string"
         description: 'Example: df903286-f179-11ea-9410-58961d'
-      - name: "source"
-        in: "query"
-        required: true
-        type: "string"
-        enum:
-          - google
-          - imarts
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -539,18 +532,43 @@ paths:
         required: true
         type: "string"
         description: 'Example: df903286-f179-11ea-9410-58961d'
-      - name: "source"
-        in: "query"
-        required: true
-        type: "string"
-        enum:
-          - google
-          - imarts
       - name: "offset"
         in: "query"
         required: true
         type: number
         description: 'Used for fetching more comments'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/latest:
+    get:
+      tags:
+      - "Store"
+      summary: "Get latest store list"
+      operationId: "latestStore"
+      parameters:
+        - name: "lang"
+          in: "query"
+          required: true
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
+        - name: "latitude"
+          in: "query"
+          required: true
+          type: "number"
+          description: 'Example: 23.98'
+        - name: "longitude"
+          in: "query"
+          required: true
+          type: "number"
+          description: 'Example: 121.6'
       responses:
         "400":
           description: "Required parameters is not included in request body"
