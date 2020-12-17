@@ -271,12 +271,12 @@ paths:
           description: "ok"
 
 
-  /api/hashtag/hot:
+  /api/tag/hot:
     get:
       tags:
-      - "Hashtag"
-      summary: "Get popular hashtags"
-      operationId: "hotHashtags"
+      - "Tag"
+      summary: "Get popular tags"
+      operationId: "hotTags"
       parameters:
       - name: "lang"
         in: "query"
@@ -304,18 +304,25 @@ paths:
         enum:
           - recommend
           - marketing
+      - name: "target"
+        in: "query"
+        required: true
+        type: "string"
+        enum:
+          - store
+          - dish
       responses:
         "400":
           description: "Required parameters is not included in request body"
         "200":
           description: "ok"
  
-  /api/hashtag/tagged:
+  /api/store/tagged:
     get:
       tags:
-      - "Hashtag"
-      summary: "Get items by hashtag"
-      operationId: "hashtaggedItems"
+      - "Store"
+      summary: "Get store by tag"
+      operationId: "taggedStore"
       parameters:
       - name: "lang"
         in: "query"
@@ -336,11 +343,11 @@ paths:
         required: true
         type: "number"
         description: 'Example: 121.6'
-      - name: "hashtag"
+      - name: "tag"
         in: "query"
         required: true
         type: "string"
-        description: 'Example: cd14a90a-3451-11eb-8aee-002b673caf83'
+        description: 'Example: 113bd8a4-3454-11eb-a5b8-002b673caf83'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -574,6 +581,44 @@ paths:
           description: "Required parameters is not included in request body"
         "200":
           description: "ok"
+  
+  /api/dish/tagged:
+    get:
+      tags:
+      - "Dish"
+      summary: "Get dish by tag"
+      operationId: "taggedDish"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "latitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      - name: "tag"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 13be9900-dace-11ea-a41e-58961d'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
 
 definitions:
   LoginWithOAuth:
