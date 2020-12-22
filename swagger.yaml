@@ -316,6 +316,24 @@ paths:
           description: "Required parameters is not included in request body"
         "200":
           description: "ok"
+  
+  /api/tag/menu:
+    get:
+      tags:
+      - "Tag"
+      summary: "Get tags by menu of a store"
+      operationId: "menuTags"
+      parameters:
+      - name: "store"
+        in: "query"
+        required: true
+        type: string
+        description: 'store ID. Example: d8953476-f178-11ea-8e2e-58961d'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
  
   /api/store/tagged:
     get:
@@ -619,6 +637,37 @@ paths:
         "200":
           description: "ok"
 
+  /api/dish/tagged-menu:
+    get:
+      tags:
+      - "Dish"
+      summary: "Get dishes by tag and store"
+      operationId: "taggedMenu"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "tag"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: abf60db8-f698-11ea-9fab-58961d'
+      - name: "store"
+        in: "query"
+        required: true
+        type: string
+        description: 'store ID. Example: d8953476-f178-11ea-8e2e-58961d'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
 
 definitions:
   LoginWithOAuth:
