@@ -669,6 +669,56 @@ paths:
         "200":
           description: "ok"
 
+  /api/dish/info:
+    get:
+      tags:
+      - "Dish"
+      summary: "Get dish info by id"
+      operationId: "dishInfo"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0bd11c14-f179-11ea-8c29-58961d'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/dish/comment:
+    get:
+      tags:
+      - "Dish"
+      summary: "Get comments by dish id"
+      operationId: "dishComment"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0bd11c14-f179-11ea-8c29-58961d'
+      - name: "offset"
+        in: "query"
+        required: true
+        type: number
+        description: 'Used for fetching more comments'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
 definitions:
   LoginWithOAuth:
     type: "object"
