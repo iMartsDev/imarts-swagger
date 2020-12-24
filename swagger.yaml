@@ -719,6 +719,42 @@ paths:
         "200":
           description: "ok"
 
+  /api/tool/translate:
+    get:
+      tags:
+      - "Tool"
+      summary: "Simple translation utility"
+      operationId: "translate"
+      parameters:
+      - name: "from"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "to"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "text"
+        in: "query"
+        required: true
+        type: string
+        description: 'string to be translated'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
 definitions:
   LoginWithOAuth:
     type: "object"
