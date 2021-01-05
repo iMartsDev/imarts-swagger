@@ -15,7 +15,7 @@ schemes:
 - "https"
 
 paths:
-  /api/login/google:
+  /api/google/login:
     post:
       tags:
       - "Authroization"
@@ -43,7 +43,7 @@ paths:
         "200":
           description: "Successfully log in with Google credentials."
 
-  /api/register/google:
+  /api/google/register:
     post:
       tags:
       - "Authroization"
@@ -71,57 +71,8 @@ paths:
         "200":
           description: "Account is created Successfully"
   
-  /api/login/facebook:
-    post:
-      tags:
-      - "Coming Soon"
-      summary: "Log in with Facebook credentials"
-      description: "Customers can log in iMarts APP with Facebook credentials."
-      operationId: "facebookLogin"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Access token retrieved from Facebook OAuth service"
-        required: true
-        schema:
-          $ref: "#/definitions/LoginWithOAuth"
-      responses:
-        "406":
-          description: "Account does not exist. Please use facebook register API to create the account."
-        "200":
-          description: "Successfully log in with Facebook credentials."
 
-  /api/register/facebook:
-    post:
-      tags:
-      - "Coming Soon"
-      summary: "Register a new account with Facebook credentials"
-      description: "Customers can register a new account with Facebook credentials."
-      operationId: "facebookRegister"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Customer info for creating a new account."
-        required: true
-        schema:
-          $ref: "#/definitions/RegisterWithOAuth"
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "409":
-          description: "Customer account with spcified Facebook ID already exists"
-        "200":
-          description: "Account is created Successfully"
-
-  /api/login/mail:
+  /api/mail/login:
     post:
       tags:
       - "Authroization"
@@ -148,7 +99,7 @@ paths:
         "200":
           description: "Successfully log in with email."
 
-  /api/register/mail:
+  /api/mail/register:
     post:
       tags:
       - "Authroization"
@@ -270,77 +221,12 @@ paths:
         "200":
           description: "ok"
 
-
-  /api/tag/hot:
+  /api/tag/stores:
     get:
       tags:
       - "Tag"
-      summary: "Get popular tags"
-      operationId: "hotTags"
-      parameters:
-      - name: "lang"
-        in: "query"
-        required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
-      - name: "latitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 23.98'
-      - name: "longitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 121.6'
-      - name: "type"
-        in: "query"
-        required: true
-        type: "string"
-        enum:
-          - recommend
-          - marketing
-      - name: "target"
-        in: "query"
-        required: true
-        type: "string"
-        enum:
-          - store
-          - dish
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-  
-  /api/tag/menu:
-    get:
-      tags:
-      - "Tag"
-      summary: "Get tags by menu of a store"
-      operationId: "menuTags"
-      parameters:
-      - name: "store"
-        in: "query"
-        required: true
-        type: string
-        description: 'store ID. Example: d8953476-f178-11ea-8e2e-58961d'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
- 
-  /api/store/tagged:
-    get:
-      tags:
-      - "Store"
-      summary: "Get store by tag"
-      operationId: "taggedStore"
+      summary: "Get stores by tag"
+      operationId: "tagStores"
       parameters:
       - name: "lang"
         in: "query"
@@ -366,6 +252,90 @@ paths:
         required: true
         type: "string"
         description: 'Example: 113bd8a4-3454-11eb-a5b8-002b673caf83'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/tag/dishes:
+    get:
+      tags:
+      - "Tag"
+      summary: "Get dishes by tag"
+      operationId: "tagDishes"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "latitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      - name: "tag"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 13be9900-dace-11ea-a41e-58961d'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/store/tags:
+    get:
+      tags:
+      - "Store"
+      summary: "Get tags of stores"
+      operationId: "StoreTags"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "type"
+        in: "query"
+        required: true
+        type: "string"
+        enum:
+          - recommend
+          - marketing
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+  
+  /api/store/dish-tags:
+    get:
+      tags:
+      - "Store"
+      summary: "Get tags by dishes of a store"
+      operationId: "storeDishTags"
+      parameters:
+      - name: "store"
+        in: "query"
+        required: true
+        type: string
+        description: 'store ID. Example: d8953476-f178-11ea-8e2e-58961d'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -409,148 +379,12 @@ paths:
         "200":
           description: "ok"
 
-  /api/store/basic:
-    get:
-      tags:
-      - "Store"
-      summary: "Get store basic info by id"
-      operationId: "storeBasic"
-      parameters:
-      - name: "lang"
-        in: "query"
-        required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
-      - name: "latitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 23.98'
-      - name: "longitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 121.6'
-      - name: "id"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/store/category:
-    get:
-      tags:
-      - "Store"
-      summary: "Get store category by id"
-      operationId: "storeCategory"
-      parameters:
-      - name: "lang"
-        in: "query"
-        required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
-      - name: "id"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/store/open-hour:
-    get:
-      tags:
-      - "Store"
-      summary: "Get store open hour by id"
-      operationId: "storeOpenHour"
-      parameters:
-      - name: "id"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/store/price:
-    get:
-      tags:
-      - "Store"
-      summary: "Get store price level by id"
-      operationId: "storePrice"
-      parameters:
-      - name: "id"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/store/payment:
-    get:
-      tags:
-      - "Store"
-      summary: "Get supported payment method by store id"
-      operationId: "storePayment"
-      parameters:
-      - name: "id"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: 00145046-346a-11eb-88de-002b673caf83'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/store/score:
-    get:
-      tags:
-      - "Store"
-      summary: "Get score summary by store id"
-      operationId: "storeScore"
-      parameters:
-      - name: "id"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: df903286-f179-11ea-9410-58961d'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/store/comment:
+  /api/store/comments:
     get:
       tags:
       - "Store"
       summary: "Get comments by store id"
-      operationId: "storeComment"
+      operationId: "storeComments"
       parameters:
       - name: "id"
         in: "query"
@@ -600,49 +434,12 @@ paths:
         "200":
           description: "ok"
   
-  /api/dish/tagged:
+  /api/store/tagged-dishes:
     get:
       tags:
-      - "Dish"
-      summary: "Get dish by tag"
-      operationId: "taggedDish"
-      parameters:
-      - name: "lang"
-        in: "query"
-        required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
-      - name: "latitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 23.98'
-      - name: "longitude"
-        in: "query"
-        required: true
-        type: "number"
-        description: 'Example: 121.6'
-      - name: "tag"
-        in: "query"
-        required: true
-        type: "string"
-        description: 'Example: 13be9900-dace-11ea-a41e-58961d'
-      responses:
-        "400":
-          description: "Required parameters is not included in request body"
-        "200":
-          description: "ok"
-
-  /api/dish/tagged-menu:
-    get:
-      tags:
-      - "Dish"
+      - "Store"
       summary: "Get dishes by tag and store"
-      operationId: "taggedMenu"
+      operationId: "StoreTaggedDishes"
       parameters:
       - name: "lang"
         in: "query"
@@ -696,12 +493,12 @@ paths:
         "200":
           description: "ok"
 
-  /api/dish/comment:
+  /api/dish/comments:
     get:
       tags:
       - "Dish"
       summary: "Get comments by dish id"
-      operationId: "dishComment"
+      operationId: "dishComments"
       parameters:
       - name: "id"
         in: "query"
@@ -713,6 +510,35 @@ paths:
         required: true
         type: number
         description: 'Used for fetching more comments'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/dish/tags:
+    get:
+      tags:
+      - "Dish"
+      summary: "Get tags of dishes"
+      operationId: "DishTags"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "type"
+        in: "query"
+        required: true
+        type: "string"
+        enum:
+          - recommend
+          - marketing
       responses:
         "400":
           description: "Required parameters is not included in request body"
