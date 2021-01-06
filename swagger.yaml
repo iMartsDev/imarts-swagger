@@ -342,6 +342,24 @@ paths:
         "200":
           description: "ok"
 
+  /api/store/product-tags:
+    get:
+      tags:
+      - "Store"
+      summary: "Get tags by products of a store"
+      operationId: "storeProductTags"
+      parameters:
+      - name: "store"
+        in: "query"
+        required: true
+        type: string
+        description: 'store ID. Example: be440457-a698-49a4-8e8c-eff4c0'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
   /api/store/info:
     get:
       tags:
@@ -466,6 +484,38 @@ paths:
         "200":
           description: "ok"
 
+  /api/store/tagged-products:
+    get:
+      tags:
+      - "Store"
+      summary: "Get products by tag and store"
+      operationId: "StoreTaggedProducts"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "tag"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 05ca5d9d-b4f5-11e9-a805-42010a'
+      - name: "store"
+        in: "query"
+        required: true
+        type: string
+        description: 'store ID. Example: be440457-a698-49a4-8e8c-eff4c0'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
   /api/dish/info:
     get:
       tags:
@@ -539,6 +589,33 @@ paths:
         enum:
           - recommend
           - marketing
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+  /api/product/info:
+    get:
+      tags:
+      - "Product"
+      summary: "Get product info by id"
+      operationId: "productInfo"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+        description: 'Example: 0bd11c14-f179-11ea-8c29-58961d'
       responses:
         "400":
           description: "Required parameters is not included in request body"
