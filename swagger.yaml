@@ -615,7 +615,7 @@ paths:
         in: "query"
         required: true
         type: "string"
-        description: 'Example: 0bd11c14-f179-11ea-8c29-58961d'
+        description: 'Example: 00b78074-2a29-11eb-ada1-002b67'
       responses:
         "400":
           description: "Required parameters is not included in request body"
