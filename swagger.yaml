@@ -516,6 +516,38 @@ paths:
         "200":
           description: "ok"
 
+  /api/store/neighbor-stores:
+    get:
+      tags:
+      - "Store"
+      summary: "Get neighbor stores"
+      operationId: "neighborStores"
+      parameters:
+      - name: "lang"
+        in: "query"
+        required: true
+        type: string
+        enum:
+          - en-us
+          - zh-tw
+          - ja
+          - ko
+      - name: "latitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 23.98'
+      - name: "longitude"
+        in: "query"
+        required: true
+        type: "number"
+        description: 'Example: 121.6'
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
   /api/dish/info:
     get:
       tags:
