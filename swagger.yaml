@@ -1,18 +1,19 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
   version: "1.0.0"
   title: "iMarts Customer Side API"
   contact:
     email: "babula@imarts.co"
-host: "804vp22bk4.execute-api.ap-northeast-1.amazonaws.com"
+
+servers:
+  - url: 'https://804vp22bk4.execute-api.ap-northeast-1.amazonaws.com'
+
 tags:
 - name: "Authroization"
   description: "APIs used for registering and logging in user"
 - name: "Coming Soon"
   description: "There API is not implemented yet. Please come back later"
 
-schemes:
-- "https"
 
 paths:
   /api/google/login:
@@ -22,17 +23,19 @@ paths:
       summary: "Log in with Google credentials"
       description: "Customers can log in iMarts APP with Google credentials."
       operationId: "googleLogin"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "ID token retrieved from Google OAuth service"
-        required: true
-        schema:
-          $ref: "#/definitions/LoginWithOAuth"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                agent:
+                  type: string
+                  enum:
+                  - android
+                  - ios
+                  - web
+                token:
+                  type: string
       responses:
         "406":
           description: "Account does not exist. Please use google register API to create the account."
@@ -50,17 +53,40 @@ paths:
       summary: "Register a new account with Google credentials"
       description: "Customers can register a new account with Google credentials."
       operationId: "googleRegister"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Customer info for creating a new account."
-        required: true
-        schema:
-          $ref: "#/definitions/RegisterWithOAuth"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                agent:
+                  type: string
+                  enum:
+                  - android
+                  - ios
+                  - web
+                token:
+                  type: string
+                  description: "ID token or access token from the OAuth service"
+                username:
+                  type: string
+                birthday:
+                  type: string
+                  description: "YYYY/MM/DD"
+                country:
+                  type: string
+                  description: 'Country code'
+                  example: TWN
+                region:
+                  type: number
+                  description: 'Region ID responsed from backend'
+                address:
+                  type: string
+                dial-code:
+                  type: string
+                  description: 'Country dial code'
+                  example: 886
+                phone:
+                  type: string
       responses:
         "409":
           description: "Customer account with spcified Google ID already exists"
@@ -79,16 +105,15 @@ paths:
       summary: "Log in with email"
       description: "Customers can log in iMarts APP with email."
       operationId: "mailLogin"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/LoginWithMail"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
       responses:
         "406":
           description: "Account does not exist."
@@ -106,17 +131,38 @@ paths:
       summary: "Register a new account with email"
       description: "Customers can register a new account with email."
       operationId: "mailRegister"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Customer info for creating a new account."
-        required: true
-        schema:
-          $ref: "#/definitions/RegisterWithMail"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                    email:
+                      type: string
+                    username:
+                      type: string
+                    password:
+                      type: string
+                    pin:
+                      type: string
+                      description: "Verification PIN"
+                    birthday:
+                      type: string
+                      description: "YYYY/MM/DD"
+                    country:
+                      type: string
+                      description: 'Country code'
+                      example: TWN
+                    region:
+                      type: number
+                      description: 'Region ID responsed from backend'
+                    address:
+                      type: string
+                    dial_code:
+                      type: string
+                      description: 'Country dial code.'
+                      example: 886
+                    phone:
+                      type: string
       responses:
         "406":
           description: "Account does not exist."
@@ -132,12 +178,20 @@ paths:
       tags:
       - "Authroization"
       operationId: 'requestPIN'
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PINRequest"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                lang:
+                  type: string
+                  enum:
+                  - zh-tw
+                  - en-us
+                  - ja
+                  - ko
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -149,12 +203,15 @@ paths:
       tags:
       - "Authroization"
       operationId: "verifyPIN"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PINVerify"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                pin:
+                  type: string
       responses:
         "406":
           description: "account not found"
@@ -173,13 +230,15 @@ paths:
       operationId: "dialCode"
       parameters:
       - name: "lang"
-        in: "query"
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -194,26 +253,29 @@ paths:
       operationId: "subregions"
       parameters:
       - name: "lang"
-        in: "query"
-        type: string
+        in: query
         required: true
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "level"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - country
-          - level1
-          - level2
+        schema:
+          type: string
+          enum:
+            - country
+            - level1
+            - level2
       - name: "key"
-        in: "query"
+        in: query
         required: true
-        type: string
+        schema:
+          type: string
         description: "Key of the region. For country, use country code such as JPN, USA. For region of other levels, use id returned by backend."
       responses:
         "400":
@@ -229,29 +291,33 @@ paths:
       operationId: "tagStores"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "latitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 23.98'
+        schema:
+          type: number
+        example: 23.98
       - name: "longitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 121.6'
+        schema:
+          type: number
+        example: 121.6
       - name: "tag"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 113bd8a4-3454-11eb-a5b8-002b673caf83'
+        schema:
+          type: string
+        example: 113bd8a4-3454-11eb-a5b8-002b673caf83
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -266,29 +332,33 @@ paths:
       operationId: "tagDishes"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "latitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 23.98'
+        schema:
+          type: number
+        example: '23.98'
       - name: "longitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 121.6'
+        schema:
+         type: number
+        example: '121.6'
       - name: "tag"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 13be9900-dace-11ea-a41e-58961d'
+        schema:
+          type: string
+        example: '13be9900-dace-11ea-a41e-58961d'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -303,21 +373,23 @@ paths:
       operationId: "StoreTags"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "type"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        enum:
-          - recommend
-          - marketing
+        schema:
+          type: string
+          enum:
+            - recommend
+            - marketing
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -332,9 +404,10 @@ paths:
       operationId: "storeDishTags"
       parameters:
       - name: "store"
-        in: "query"
+        in: query
         required: true
-        type: string
+        schema:
+          type: string
         description: 'store ID. Example: d8953476-f178-11ea-8e2e-58961d'
       responses:
         "400":
@@ -350,9 +423,10 @@ paths:
       operationId: "storeProductTags"
       parameters:
       - name: "store"
-        in: "query"
+        in: query
         required: true
-        type: string
+        schema:
+          type: string
         description: 'store ID. Example: be440457-a698-49a4-8e8c-eff4c0'
       responses:
         "400":
@@ -368,29 +442,33 @@ paths:
       operationId: "storeInfo"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "latitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 23.98'
+        schema:
+          type: number
+        example: '23.98'
       - name: "longitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 121.6'
+        schema:
+          type: number
+        example: '121.6'
       - name: "id"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 0003df6a-c5ba-4173-b38b-e34337'
+        schema:
+          type: string
+        example: '0003df6a-c5ba-4173-b38b-e34337'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -405,14 +483,16 @@ paths:
       operationId: "storeComments"
       parameters:
       - name: "id"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: df903286-f179-11ea-9410-58961d'
+        schema:
+          type: string
+        example: 'df903286-f179-11ea-9410-58961d'
       - name: "offset"
-        in: "query"
+        in: query
         required: true
-        type: number
+        schema:
+          type: number
         description: 'Used for fetching more comments'
       responses:
         "400":
@@ -428,24 +508,27 @@ paths:
       operationId: "latestStore"
       parameters:
         - name: "lang"
-          in: "query"
+          in: query
           required: true
-          type: string
-          enum:
-            - en-us
-            - zh-tw
-            - ja
-            - ko
+          schema:
+            type: string
+            enum:
+              - en-us
+              - zh-tw
+              - ja
+              - ko
         - name: "latitude"
-          in: "query"
+          in: query
           required: true
-          type: "number"
-          description: 'Example: 23.98'
+          schema:
+            type: number
+          example: '23.98'
         - name: "longitude"
-          in: "query"
+          in: query
           required: true
-          type: "number"
-          description: 'Example: 121.6'
+          schema:
+            type: number
+          example: '121.6'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -460,23 +543,26 @@ paths:
       operationId: "StoreTaggedDishes"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "tag"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: abf60db8-f698-11ea-9fab-58961d'
+        schema:
+          type: string
+        example: 'abf60db8-f698-11ea-9fab-58961d'
       - name: "store"
-        in: "query"
+        in: query
         required: true
-        type: string
+        schema:
+          type: string
         description: 'store ID. Example: d8953476-f178-11ea-8e2e-58961d'
       responses:
         "400":
@@ -492,23 +578,26 @@ paths:
       operationId: "StoreTaggedProducts"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "tag"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 05ca5d9d-b4f5-11e9-a805-42010a'
+        schema:
+          type: string
+        example: '05ca5d9d-b4f5-11e9-a805-42010a'
       - name: "store"
-        in: "query"
+        in: query
         required: true
-        type: string
+        schema:
+          type: string
         description: 'store ID. Example: be440457-a698-49a4-8e8c-eff4c0'
       responses:
         "400":
@@ -524,24 +613,27 @@ paths:
       operationId: "neighborStores"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "latitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 23.98'
+        schema:
+          type: number
+        example: '23.98'
       - name: "longitude"
-        in: "query"
+        in: query
         required: true
-        type: "number"
-        description: 'Example: 121.6'
+        schema:
+          type: number
+        example: '121.6'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -556,19 +648,21 @@ paths:
       operationId: "dishInfo"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "id"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 0bd11c14-f179-11ea-8c29-58961d'
+        schema:
+          type: string
+        example: '0bd11c14-f179-11ea-8c29-58961d'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -583,14 +677,16 @@ paths:
       operationId: "dishComments"
       parameters:
       - name: "id"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 0bd11c14-f179-11ea-8c29-58961d'
+        schema:
+          type: string
+        example: '0bd11c14-f179-11ea-8c29-58961d'
       - name: "offset"
-        in: "query"
+        in: query
         required: true
-        type: number
+        schema:
+          type: number
         description: 'Used for fetching more comments'
       responses:
         "400":
@@ -606,21 +702,23 @@ paths:
       operationId: "DishTags"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "type"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        enum:
-          - recommend
-          - marketing
+        schema:
+          type: string
+          enum:
+            - recommend
+            - marketing
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -635,19 +733,21 @@ paths:
       operationId: "productInfo"
       parameters:
       - name: "lang"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "id"
-        in: "query"
+        in: query
         required: true
-        type: "string"
-        description: 'Example: 00b78074-2a29-11eb-ada1-002b67'
+        schema:
+          type: string
+        example: '00b78074-2a29-11eb-ada1-002b67'
       responses:
         "400":
           description: "Required parameters is not included in request body"
@@ -662,27 +762,30 @@ paths:
       operationId: "translate"
       parameters:
       - name: "from"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "to"
-        in: "query"
+        in: query
         required: true
-        type: string
-        enum:
-          - en-us
-          - zh-tw
-          - ja
-          - ko
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
       - name: "text"
-        in: "query"
+        in: query
         required: true
-        type: string
+        schema:
+          type: string
         description: 'string to be translated'
       responses:
         "400":
@@ -690,124 +793,60 @@ paths:
         "200":
           description: "ok"
 
-definitions:
-  LoginWithOAuth:
-    type: "object"
-    required:
-      - token
-      - agent
-    properties:
-      agent:
-        type: "string"
-        enum:
-        - android
-        - ios
-        - web
-      token:
-        type: "string"
-  LoginWithMail:
-    type: "object"
-    required:
-      - email
-      - password
-    properties:
-      email:
-        type: "string"
-      password:
-        type: "string"
-  RegisterWithOAuth:
-    type: "object"
-    required:
-      - agent
-      - token
-      - username
-    properties:
-      agent:
-        type: "string"
-        enum:
-        - android
-        - ios
-        - web
-      token:
-        type: "string"
-        description: "ID token or access token from the OAuth service"
-      username:
-        type: "string"
-      birthday:
-        type: "string"
-        description: "YYYY/MM/DD"
-      country:
-        type: "string"
-        description: 'Country code. Example: TWN'
-      region:
-        type: "number"
-        description: 'Region ID responsed from backend'
-      address:
-        type: "string"
-      dial-code:
-        type: "string"
-        description: 'Country dial code. Example: 886'
-      phone:
-        type: "string"
-  RegisterWithMail:
-    type: "object"
-    required:
-      - email
-      - username
-      - password
-      - pin
-    properties:
-      email:
-        type: "string"
-      username:
-        type: "string"
-      password:
-        type: "string"
-      pin:
-        type: "string"
-        description: "Verification PIN"
-      birthday:
-        type: "string"
-        description: "YYYY/MM/DD"
-      country:
-        type: "string"
-        description: 'Country code. Example: TWN'
-      region:
-        type: "number"
-        description: 'Region ID responsed from backend'
-      address:
-        type: "string"
-      dial_code:
-        type: "string"
-        description: 'Country dial code. Example: 886'
-      phone:
-        type: "string"
-  PINVerify:
-    type: "object"
-    required:
-      - email
-      - pin
-    properties:
-      email:
-        type: "string"
-      pin:
-        type: "string"
-  PINRequest:
-    type: "object"
-    required:
-      - email
-    properties:
-      email:
-        type: "string"
-      lang:
-        type: "string"
-        enum:
-        - zh-tw
-        - en-us
-        - ja
-        - ko
+  /api/register/questions:
+    get:
+      tags:
+      - "Register"
+      summary: "Get register questions"
+      operationId: "registerQuestions"
+      parameters:
+      - name: "lang"
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+            - en-us
+            - zh-tw
+            - ja
+            - ko
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
 
-        
+  /api/register/answers:
+    post:
+      tags:
+      - "Register"
+      summary: "Post register answers"
+      operationId: "registerAnswers"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                answers:
+                  type: array
+                  items:
+                    description: "Answer ID"
+                    type: string
+      responses:
+        "400":
+          description: "Required parameters is not included in request body"
+        "200":
+          description: "ok"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
