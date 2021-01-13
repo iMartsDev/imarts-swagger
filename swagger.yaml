@@ -793,12 +793,12 @@ paths:
         "200":
           description: "ok"
 
-  /api/register/questions:
+  /api/questionnaire/questions:
     get:
       tags:
-      - "Register"
-      summary: "Get register questions"
-      operationId: "registerQuestions"
+      - "Questionnaire"
+      summary: "Get questionnaire questions"
+      operationId: "questionnaireQuestions"
       parameters:
       - name: "lang"
         in: query
@@ -816,12 +816,12 @@ paths:
         "200":
           description: "ok"
 
-  /api/register/answers:
+  /api/questionnaire/answers:
     post:
       tags:
-      - "Register"
-      summary: "Post register answers"
-      operationId: "registerAnswers"
+      - "Questionnaire"
+      summary: "Post questionnaire answers"
+      operationId: "questionnaireAnswers"
       security:
         - bearerAuth: []
       requestBody:
